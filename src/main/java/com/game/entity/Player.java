@@ -1,27 +1,51 @@
 package com.game.entity;
 
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.Hibernate;
+
 import java.util.Date;
+import java.util.Objects;
 
 
+@NamedQuery(name = "Player_GetAllCount",
+        query = "SELECT count(p) FROM Player p")
+
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+
+@Entity
+@Table(name = "player", schema = "rpg")
 public class Player {
+    @Id
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "title", length = 30, nullable = false)
     private String title;
 
+    @Column(name = "race", nullable = false)
+    @Enumerated(EnumType.ORDINAL)
     private Race race;
 
+    @Column(name = "profession", nullable = false)
+    @Enumerated(EnumType.ORDINAL)
     private Profession profession;
 
+    @Column(name = "birthday", nullable = false)
     private Date birthday;
 
+    @Column(name = "banned", nullable = false)
     private Boolean banned;
 
+    @Column(name = "level", nullable = false)
     private Integer level;
-
-    public Player() {
-    }
 
     public Player(Long id, String name, String title, Race race, Profession profession, Date birthday, Boolean banned, Integer level) {
         this.id = id;
@@ -34,67 +58,16 @@ public class Player {
         this.level = level;
     }
 
-    public Long getId() {
-        return id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Player player = (Player) o;
+        return id != null && Objects.equals(id, player.id);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Race getRace() {
-        return race;
-    }
-
-    public void setRace(Race race) {
-        this.race = race;
-    }
-
-    public Profession getProfession() {
-        return profession;
-    }
-
-    public void setProfession(Profession profession) {
-        this.profession = profession;
-    }
-
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    public Boolean getBanned() {
-        return banned;
-    }
-
-    public void setBanned(Boolean banned) {
-        this.banned = banned;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
